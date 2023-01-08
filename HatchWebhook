@@ -1,0 +1,47 @@
+plr = game.Players.LocalPlayer
+scroller = plr.PlayerGui.Chat.Frame.ChatChannelParentFrame.Frame_MessageLogDisplay.Scroller
+petscrolling = plr.PlayerGui.PetInv.Background.ImageFrame.Window.PetHolder.PetScrolling
+HttpService = game:GetService("HttpService")
+
+petscrolling.ChildAdded:Connect(function(child)
+    wait(0.1)
+    local response = syn.request(
+{
+    Url = Webhook_URL,
+    Method = 'Post',
+    Headers = {
+        ['Content-Type'] = 'application/json'
+    },
+    Body = HttpService:JSONEncode({
+        ["username"] = "SFS Bot",
+        ["avatar_url"] = "https://64.media.tumblr.com/30dacbd112d6e3281a9f296ed51779aa/1cf1e1df4ada7a47-c8/s400x600/5838bf96b90953db4d749051f5c643dc279f1540.png",
+        ["content"] = "",
+        ["embeds"] = {{
+            ["title"] = "**Hatch Notifier**", --"**Your script has been executed!**",
+            ["description"] = "*Player: ||".. plr.Name .. "||*", --Nothing here,
+            ["type"] = "rich",
+            ["color"] = tonumber(0x3364FF),
+            ["fields"] = {
+                {
+                    ["name"] = "Hatched:",
+                    ["value"] = child.Frame.Viewport:FindFirstChildWhichIsA("Model").Name,
+                    ["inline"] = false
+                },
+                {
+                    ["name"] = "Total Coins:",
+                    ["value"] = game.Players.LocalPlayer.leaderstats.Coins.value,
+                    ["inline"] = true
+                },
+                {
+                    ["name"] = "Total Power:",
+                    ["value"] = game.Players.LocalPlayer.leaderstats.Power.value,
+                    ["inline"] = true
+                }
+                
+                
+            }
+        }}
+    })
+}
+)
+end)
